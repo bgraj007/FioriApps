@@ -1,0 +1,36 @@
+<!--<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<ResponsivePopover
+		title="{Name}"
+		class="sapUiPopupWithPadding"
+		placement="Bottom" >
+		<endButton>
+			<Button text="Add" press="handleCommentAdd" />
+		</endButton>
+		<content>
+			<TextArea value="{worklistView>/Comments}" cols="30" rows="4" />
+		</content>
+	</ResponsivePopover>
+</core:FragmentDefinition>-->
+
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="Add Comment"
+		class="sapUiContentPadding"
+		placement="Left"
+			initialFocus="email">
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button
+					id="AddComment"
+					text="{i18n>AddComment}"
+					press="handleCommentAdd" />
+			</Toolbar>
+		</footer>
+		<TextArea value="{worklistView>/NewComments}" cols="30" rows="4" />
+	</Popover>
+</core:FragmentDefinition>

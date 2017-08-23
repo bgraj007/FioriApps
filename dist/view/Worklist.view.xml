@@ -1,0 +1,122 @@
+<mvc:View controllerName="BillManagerWorklist.controller.Worklist" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:semantic="sap.m.semantic"
+	xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+	<semantic:FullscreenPage id="page" navButtonPress="onNavBack" showNavButton="true" title="{i18n>worklistViewTitle}">
+		<semantic:content>
+			<f:SimpleForm maxContainerCols="3"
+			editable="true"
+			layout="GridLayout"
+			labelSpanL="2"
+			labelSpanM="8"
+			emptySpanL="0"
+			emptySpanM="0"
+			columnsL="3"
+			columnsM="2" >
+				<f:toolbar>
+					<Toolbar id="TB1">
+						<Title text="Filter worklist" level="H4" titleStyle="H4"/>
+						<ToolbarSpacer/>
+						<Button text="GO" type="Accept" press="onGoPress"/>
+					</Toolbar>
+				</f:toolbar>
+				<f:content>
+					<l:Grid defaultSpan="L2 M1 S1" position="Right">
+						<l:content>
+							<Label textAlign="Right" design="Bold" text="Billing Office"/>
+							<Input type="Text" id="idbillingOffice" value="{searchModel>/Boffice}" showValueHelp="true" valueHelpRequest="handleValueHelpBillofc"/>
+							<Label textAlign="Right" design="Bold" text="Work Date"/>
+							<DatePicker id="Datefrom" placeholder="{i18n>fromDate}" value="{searchModel>/WorkDateFrom}" valueFormat="yyyy-MM-dd" displayFormat="long"/>
+							<DatePicker id="Dateto" placeholder="{i18n>toDate}" value="{searchModel>/WorkDateTo}" valueFormat="yyyy-MM-dd" displayFormat="long"/>
+						</l:content>
+					</l:Grid>
+				</f:content>
+			</f:SimpleForm>
+			<Table id="table" width="auto" class="sapUiResponsiveMargin"
+				items="{ path: '/WorklistBillManagerSet', sorter: { path: 'Post1', descending: false, group: true }, groupHeaderFactory: '.getGroupHeader' }"
+				mode="MultiSelect" selectionChange="onItemSelect" noDataText="{worklistView>/tableNoDataText}"
+				busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true" updateFinished="onUpdateFinished">
+				<headerToolbar>
+					<Toolbar>
+						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
+						<ToolbarSpacer/>
+						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search="onSearch" width="auto"></SearchField>
+						<Button type="Accept" text="Refresh" icon="sap-icon://refresh" press="handleTableRefresh"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>DraftBill}"/>
+							<!--	<core:Icon custom:sortField="Vbeln" custom:sortOrder="false" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>Matter}"/>
+							<!--<core:Icon custom:sortField="Pspid" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>BillingPartner}"/>
+							<!--	<core:Icon custom:sortField="BillingPartner" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>Softcost}"/>
+							<!--	<core:Icon custom:sortField="ScValue" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>Fee}"/>
+							<!--	<core:Icon custom:sortField="FeeValue" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>Hardcost}"/>
+							<!--	<core:Icon custom:sortField="HcValue" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>NetAmount}"/>
+							<!--	<core:Icon custom:sortField="NetValue" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column minScreenWidth="Tablet" demandPopin="true">
+						<l:HorizontalLayout>
+							<Label design="Bold" text="{i18n>Currency}"/>
+							<!--	<core:Icon custom:sortField="Waers" custom:sortOrder="" press="handleSortPress" class="sapUiTinyMarginBegin" src="sap-icon://sorting-ranking"/>-->
+						</l:HorizontalLayout>
+					</Column>
+					<Column demandPopin="true" id="commentsCol">
+						<Label design="Bold" text="{i18n>Comments}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem press="onPress" type="Active">
+						<Text text="{Vbeln}"/>
+						<Link text="{Pspid}" subtle="true" press="handleMatterPress"/>
+						<Text text="{BillingPartner}" textAlign="Center"/>
+						<Text text="{ScValue}" textAlign="Center"/>
+						<Text text="{FeeValue}" textAlign="Center"/>
+						<Text text="{HcValue}" textAlign="Center"/>
+						<Text text="{NetValue}" textAlign="Center"/>
+						<Text text="{Waers}" textAlign="Center"/>
+						<l:HorizontalLayout>
+							<Button enabled="false" text="View" icon="sap-icon://comment" press="disPlayComment" custom:billNumb="{Vbeln}"/>
+							<Button enabled="false" custom:caller="single" class="sapUiTinyMarginBegin" icon="sap-icon://add" press="showQickView"
+								custom:billNumb="{Vbeln}"/>
+						</l:HorizontalLayout>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</semantic:content>
+		<semantic:customFooterContent>
+			<Button text="Delegate To" press="delegateToUser"/>
+		</semantic:customFooterContent>
+	</semantic:FullscreenPage>
+</mvc:View>

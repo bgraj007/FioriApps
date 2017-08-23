@@ -1,0 +1,222 @@
+<mvc:View controllerName="BillManagerWorklist.controller.Worklist" xmlns="sap.ui.table" xmlns:m="sap.m" xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:custom="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:semantic="sap.m.semantic"
+	xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+	<semantic:FullscreenPage id="page" navButtonPress="onNavBack" showNavButton="true" title="{i18n>worklistViewTitle}">
+		<semantic:customHeaderContent>
+			<m:Button icon="sap-icon://switch-views" type="Emphasized" tooltip="Go To MyWorkList" press="switchApp"/>
+		</semantic:customHeaderContent>
+		<semantic:content>
+			<f:SimpleForm maxContainerCols="3" editable="true" layout="GridLayout" labelSpanL="2" labelSpanM="8" emptySpanL="0" emptySpanM="0"
+				columnsL="3" columnsM="2">
+				<!--	<f:toolbar>
+					<m:Toolbar id="TB1">
+						<m:Title text="Filter worklist" level="H4" titleStyle="H4"/>
+						<m:ToolbarSpacer/>
+						<m:Button text="GO" type="Accept" press="onGoPress"/>
+					</m:Toolbar>
+				</f:toolbar>-->
+				<f:content>
+					<l:Grid defaultSpan="L2 M1 S1" position="Right">
+						<l:content>
+							<m:Label textAlign="Right" design="Bold" text="{i18n>BillingOffice}" width="100%"/>
+							<m:Input type="Text" id="idbillingOffice" value="{searchModel>/Boffice}" showValueHelp="true" valueHelpRequest="handleValueHelpBillofc"/>
+							<m:Label textAlign="Right" design="Bold" text="{i18n>Createdate}" width="100%"/>
+							<m:DatePicker id="Datefrom" placeholder="{i18n>fromDate}" value="{searchModel>/WorkDateFrom}" valueFormat="MM/dd/yyyy HH:mm:ss"
+								displayFormat="long"/>
+							<m:DatePicker id="Dateto" placeholder="{i18n>toDate}" value="{searchModel>/WorkDateTo}" valueFormat="MM/dd/yyyy HH:mm:ss"
+								displayFormat="long" change="handleChange"/>
+							<m:Button text="GO" type="Accept" press="onGoPress"/>
+						</l:content>
+					</l:Grid>
+				</f:content>
+			</f:SimpleForm>
+			<Table id="table" width="auto" class="sapUiResponsiveMargin"
+				selectionMode="MultiToggle" rowSelectionChange="onItemSelect" busyIndicatorDelay="{worklistView>/tableBusyDelay}" enableBusyIndicator="true"
+				visibleRowCount="9" threshold="10" fixedColumnCount="4">
+				<toolbar>
+					<m:Toolbar>
+						<m:Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
+						<m:ToolbarSpacer/>
+						<m:SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search="onSearch" width="auto"></m:SearchField>
+						<m:Button type="Accept" text="Refresh" icon="sap-icon://refresh" press="handleTableRefresh"/>
+					</m:Toolbar>
+				</toolbar>
+				<noData>
+					<!--<m:Text text="{worklistView>/tableNoDataText}"/>-->
+					<m:BusyIndicator class="sapUiMediumMargin" text="{worklistView>/tableNoDataText}"/>
+				</noData>
+				<columns>
+					<Column width="3rem">
+						<label>
+							<m:Label text="Info" design="Bold"/>
+						</label>
+						<template>
+							<core:Icon src="{path:'Error',formatter:'.formatter.SeTStatusIcon'}" color="{path:'Error',formatter:'.formatter.SeTStatusIconColor'}"
+								tooltip="{Message}"/>
+						</template>
+					</Column>
+					<Column id="idSearchFieldFilterColumn" width="8rem" sortProperty="Vbeln" filterProperty="Vbeln" filtered="true">
+						<m:Label design="Bold" text="{i18n>DraftBill}"/>
+						<template>
+							<m:Link text="{Vbeln}" subtle="true" target="_self" press="onPressBill" wrapping="true"/>
+						</template>
+					</Column>
+					<Column width="9rem" sortProperty="Status" filterProperty="Status" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Status}"/>
+						</label>
+						<template>
+							<m:Link text="{Status}" subtle="true" target="_self" press="handleAuditTrailReport" wrapping="true"/>
+						</template>
+					</Column>
+					<Column width="9rem" sortProperty="ToUser" filterProperty="ToUser" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>AssignTo}"/>
+						</label>
+						<template>
+							<m:Text text="{ToUser}"/>
+						</template>
+					</Column>
+					<Column width="9rem" sortProperty="User" filterProperty="User" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Agent}"/>
+						</label>
+						<template>
+							<m:Text text="{UserName} {User}"/>
+						</template>
+					</Column>
+					<Column width="9rem" sortProperty="Vtext" filterProperty="Vtext" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Role}"/>
+						</label>
+						<template>
+							<m:Text text="{Vtext}"/>
+						</template>
+					</Column>
+				<!--	<Column width="9rem" filtered="true" filterProperty="CreateTime" filterType="{type: 'sap.ui.model.type.Date', pattern: 'MM/dd/yyyy HH:mm:ss'}">
+						<label>
+							<m:Label design="Bold" text="{i18n>DateTime}"/>
+						</label>
+						<template>
+							<m:Text text="{CreateTime}"/>
+						</template>
+					</Column>-->
+					<Column width="7rem">
+						<label>
+							<m:Label design="Bold" text="{i18n>Duration}"/>
+						</label>
+						<template>
+							<m:Text text="{WiDuration}"/>
+						</template>
+					</Column>
+					<Column id="idCheckoutbyFilterColumn" width="7rem" sortProperty="Pspid" filterProperty="Pspid" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Matter}"/>
+						</label>
+						<template>
+							<m:Text text="{Pspid}"/>
+						</template>
+					</Column>
+					<Column  width="12rem" sortProperty="Post1" filterProperty="Post1" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>MatterName}"/>
+						</label>
+						<template>
+							<m:Text text="{Post1}"/>
+						</template>
+					</Column>
+					<Column width="6rem" sortProperty="Kunnr" filterProperty="Kunnr" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Client}"/>
+						</label>
+						<template>
+							<m:Text text="{Kunnr}"/>
+						</template>
+					</Column>
+					<Column width="12rem" sortProperty="Kunnrname" filterProperty="Kunnrname" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>ClientName}"/>
+						</label>
+						<template>
+							<m:Text text="{Kunnrname}"/>
+						</template>
+					</Column>
+					<Column width="6rem" sortProperty="Boffice" filterProperty="Boffice" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>BillOfc}"/>
+						</label>
+						<template>
+							<m:Text text="{Boffice} {Werksdesc}"/>
+						</template>
+					</Column>
+				<!--	<Column width="9rem" sortProperty="Werksdesc" filterProperty="Werksdesc" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>BillOfc}"/>
+						</label>
+						<template>
+							<m:Text text="{Werksdesc}"/>
+						</template>
+					</Column>-->
+					<Column id="idDraftBill" width="6rem" sortProperty="Vbeln" filterProperty="Vbeln" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Fee}"/>
+						</label>
+						<template>
+							<m:Text text="{FeeValue}" textAlign="Center"/>
+						</template>
+					</Column>
+					<Column id="idDraftBillStatus" width="6rem" autoResizable="true" sortProperty="Stext" filterProperty="Stext" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Softcost}"/>
+						</label>
+						<template>
+							<m:Text text="{ScValue}" textAlign="Center"/>
+						</template>
+					</Column>
+					<Column width="6rem" filtered="true" sortProperty="Pspid" filterProperty="Pspid">
+						<label>
+							<m:Label design="Bold" text="{i18n>Hardcost}"/>
+						</label>
+						<template>
+							<m:Text text="{HcValue}" textAlign="Center"/>
+						</template>
+					</Column>
+					<Column id="idMatterName" width="6rem" sortProperty="Post1" filterProperty="Post1" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>NetAmount}"/>
+						</label>
+						<template>
+							<m:Text text="{NetValue}" textAlign="Center"/>
+						</template>
+					</Column>
+					<Column id="idClientName" width="5rem" sortProperty="Name1" filterProperty="Name1" filtered="true">
+						<label>
+							<m:Label design="Bold" text="{i18n>Currency}"/>
+						</label>
+						<template>
+							<m:Text text="{Waers}" textAlign="Center"/>
+						</template>
+					</Column>
+					<Column id="idBillingOffice" width="8rem">
+						<label>
+							<m:Label design="Bold" text="{i18n>Comments}"/>
+						</label>
+						<template>
+							<l:HorizontalLayout>
+								<m:Button text="View" icon="sap-icon://comment" press="disPlayComment" custom:billNumb="{Vbeln}"
+									type="{path: 'Comments',formatter : '.formatter.toggleButtonColor'}"/>
+								<m:Button custom:caller="single" class="sapUiTinyMarginBegin" icon="sap-icon://add" press="showQuickView" custom:billNumb="{Vbeln}"/>
+							</l:HorizontalLayout>
+						</template>
+					</Column>
+				</columns>
+			</Table>
+		</semantic:content>
+		<semantic:customFooterContent>
+			<m:Button text="Assign To Me" press="selfDelegate" custom:delType="SELF"/>
+			<m:Button text="Delegate To" press="delegateToUser" custom:delType="OTHERS" enabled="{worklistView>/delToOthers}"/>
+			<m:Button custom:caller="multi" class="sapUiTinyMarginBegin" icon="sap-icon://comment" text="Add Comment" press="showQuickView"/>
+			<m:Button text="Save" press="onDelegatet" custom:delType=""/>
+		</semantic:customFooterContent>
+	</semantic:FullscreenPage>
+</mvc:View>

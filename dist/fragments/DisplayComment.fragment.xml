@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="View Comment"
+		class="sapUiContentPadding"
+		placement="Left"
+		>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button
+					text="Close"
+					press="handlCommentClose" />
+			</Toolbar>
+		</footer>
+		<TextArea value="{worklistView>/Comments}" cols="30" enabled="false" rows="4" />
+	</Popover>
+</core:FragmentDefinition>

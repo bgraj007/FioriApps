@@ -1,0 +1,16 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<SelectDialog
+		title="Select Billing Office"
+		noDataText="No Data Found"
+		class="sapUiPopupWithPadding"
+		items="{F4Model>/BillingOfficeSet}"
+		search="_handleValueHelpSearch"
+		confirm="handleBOfficeConfirm"
+		>
+		<StandardListItem
+			title="{F4Model>Name1}"
+			description="{F4Model>Werks}" />
+	</SelectDialog>
+</core:FragmentDefinition>
